@@ -2,72 +2,42 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    tabsData: {},
-    activeTabId: null,
-    secondTabs: {},
-    count: 0
+    mainTabs: {},
+    secondaryTabs: {},
+    activeTabId: null
   },
   mutations: {
-    setActiveTabId(state, tabId) {
-      state.activeTabId = tabId;
-      Object.keys(state.tabsData).forEach((id) => {
-        state.tabsData[id].active = (id === tabId);
-      });
-    },
-    increment(state) {
-       state.count++ 
-      },
-    setTabData(state, { tabId, data }) {
-      state.tabsData = {
-        ...state.tabsData,
-        [tabId]: {
-          ...data,
-          active: (state.activeTabId === tabId)
-        },
+    addNewTab(state, {tabName, data}) {
+      state.mainTabs = {
+        ... state.mainTabs,
+        [tabName]: {
+          ...data
+        }
       };
     },
-  
-    updateFormData(state, formData) {
-      if (state.activeTabId) {
-        state.tabsData[state.activeTabId] = {
-          ...state.tabsData[state.activeTabId],
-          formData,
-        };
-      }
-    },
-    
-    removeTabData(state, tabId) {
-      const {[tabId]: _, ...rest} = state.tabsData;
-      state.tabsData = rest;
-      if (state.activeTabId === tabId) {
-        state.activeTabId = null;
-      }
-    },
-    addSecondTabData(state, {tabName, secondTabData}) {
-      state.secondTabs = {
-        ...state.secondTabs,
-        [tabName]: {
-          ...secondTabData
+    updateTabData(state, { tabId, secondTabId, data }) {
+      if (state.mainTabs[tabId]) {
+        state.mainTabs[tabId] = {
+          ...state.mainTabs[tabId],
+          [secondTabId]: {
+            ...data
+          }
         }
       }
+    },
+    setActiveTabId(state, tabId) {
+      state.activeTabId = tabId;
     }
   },
   actions: {
+    addNewTab({ commit }, tabName) {
+      commit('addNewTab', tabName);
+    },
+    setUpdateTabData({ commit }, { tabId, secondTabId, data }) {
+      commit('updateTabData', { tabId, secondTabId, data });
+    },
     setActiveTabId({ commit }, tabId) {
       commit('setActiveTabId', tabId);
-    },
-    updateTabData({ commit }, { tabId, data }) { 
-      commit('setTabData', { tabId, data }); 
-    }, 
-
-    updateFormData({ commit }, formData) {
-      commit('updateFormData', formData);
-    },
-    deleteTabData({ commit }, tabId) {
-       commit('removeTabData', tabId); 
-      },
-    addSecondTabData({ commit }, {tabName, secondTabData}) {
-      commit('addSecondTabData', {tabName, secondTabData});
     }
   },
   modules: {}

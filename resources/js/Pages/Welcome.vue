@@ -7,20 +7,20 @@
 
   </div>
   <div class="m-5 w-auto flex flex-start">
-    <div v-for="(tab, index) in tabsData" :key="tab.id"
+    <div v-for="(tab, index) in Object.entries(tabsData)" :key="index"
       :class="[tab.content === activeTabId ? 'bg-gray-200' : 'bg-gray-100']"
       class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
       @click="openTab(tab.content)">
-      {{ tab.content }}
+      {{ index }}
     </div>
   </div>
-  <div class="m-5 w-auto flex flex-start">
+  <!-- <div class="m-5 w-auto flex flex-start">
     <div v-for="(sTab, index) in secondTabs" :key="sTab.id"
       class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
       >
       {{ sTab.content }}
     </div>
-  </div>
+  </div> -->
 
   <slot name="content" />
 
@@ -32,8 +32,7 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 
-const tabsData = computed(() => store.state.tabsData);
-const secondTabs = computed(() => store.state.secondTabs);
+const tabsData = computed(() => store.state.mainTabs);
 const activeTabId = computed(() => store.state.activeTabId);
 
 
@@ -51,11 +50,11 @@ const addNewTab = (tabName) => {
   if (existingTab) {
     return openTab(tabName);
   } else {
-    const newTabId = `tab${Object.keys(tabsData.value).length + 1}`;
+    const newTabId = tabName;
     const newTabData = {
-      content: tabName
+      content: 'Data for :  ' + tabName
     };
-    store.dispatch('updateTabData', { tabId: newTabId, data: newTabData });
+    store.dispatch('setUpdateTabData', { tabId: newTabId, data: newTabData });
     openTab(tabName, newTabId);
   }
 
