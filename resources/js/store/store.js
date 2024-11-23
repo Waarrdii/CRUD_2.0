@@ -13,7 +13,6 @@ export default createStore({
         state.tabsData[id].active = (id === tabId);
       });
     },
-    
     increment(state) {
        state.count++ 
       },
@@ -23,19 +22,11 @@ export default createStore({
         [tabId]: {
           ...data,
           active: (state.activeTabId === tabId),
+          childTabs: state.tabsData[tabId]?.childTabs || {}
         },
       };
     },
-    setChildTabData(state, { parentTabId, childTabData }) {
-      if(!state.tabsData[parentTabId].childTab) {
-        state.tabsData[parentTabId].childTab = {};
-      }
-      const childTabId = `childTab${Object.keys(state.tabsData[parentTabId].childTabData).length + 1}`;
-      state.tabsData[parentTabId].childTab[childTabId] = {
-        ...childTabData,
-        active: true,
-      };
-    },
+  
     updateFormData(state, formData) {
       if (state.activeTabId) {
         state.tabsData[state.activeTabId] = {
@@ -56,9 +47,6 @@ export default createStore({
   actions: {
     setActiveTabId({ commit }, tabId) {
       commit('setActiveTabId', tabId);
-    },
-    addChildTabData ({ commit }, { parentTabId, childTabData }) {
-      commit('setChildTabData', { parentTabId, childTabData });
     },
     updateTabData({ commit }, { tabId, data }) { 
       commit('setTabData', { tabId, data }); 
