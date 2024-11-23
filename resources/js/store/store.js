@@ -4,6 +4,7 @@ export default createStore({
   state: {
     tabsData: {},
     activeTabId: null,
+    secondTabs: {},
     count: 0
   },
   mutations: {
@@ -21,8 +22,7 @@ export default createStore({
         ...state.tabsData,
         [tabId]: {
           ...data,
-          active: (state.activeTabId === tabId),
-          childTabs: state.tabsData[tabId]?.childTabs || {}
+          active: (state.activeTabId === tabId)
         },
       };
     },
@@ -42,6 +42,14 @@ export default createStore({
       if (state.activeTabId === tabId) {
         state.activeTabId = null;
       }
+    },
+    addSecondTabData(state, {tabName, secondTabData}) {
+      state.secondTabs = {
+        ...state.secondTabs,
+        [tabName]: {
+          ...secondTabData
+        }
+      }
     }
   },
   actions: {
@@ -57,7 +65,10 @@ export default createStore({
     },
     deleteTabData({ commit }, tabId) {
        commit('removeTabData', tabId); 
-      }
+      },
+    addSecondTabData({ commit }, {tabName, secondTabData}) {
+      commit('addSecondTabData', {tabName, secondTabData});
+    }
   },
   modules: {}
 });

@@ -15,16 +15,15 @@
     </div>
   </div>
   <div class="m-5 w-auto flex flex-start">
-    <div v-for="(sTab, index) in secondTabs" :key="sTab.id" :class="[tab.active ? 'bg-gray-200' : 'bg-gray-100']"
+    <div v-for="(sTab, index) in secondTabs" :key="sTab.id"
       class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
-      @click="openSecondTab(sTab.content)">
-      {{ tab.content }}
+      >
+      {{ sTab.content }}
     </div>
   </div>
 
   <slot name="content" />
 
-  <button @click="openSecondTab('tab1','create')">add second tab</button>
 </template>
 <script setup>
 import { computed, provide, ref } from 'vue'
@@ -34,13 +33,9 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 const tabsData = computed(() => store.state.tabsData);
+const secondTabs = computed(() => store.state.secondTabs);
 const activeTabId = computed(() => store.state.activeTabId);
-const secondTabs = computed(() => {
-  if (activeTabId.value && store.state.tabsData[activeTabId.value]?.childTabs) {
-    return Object.values(store.state.tabsData[activeTabId.value].childTabs);
-  }
-  return [];
-});
+
 
 const openTab = (tabId) => {
   if (activeTabId.value === tabId) {
@@ -66,15 +61,6 @@ const addNewTab = (tabName) => {
 
   console.log(store.state.tabsData);
 }
-
-const openSecondTab = (parentTabId, childTabName) => {
-  const childTabData = {
-    content: childTabName,
-    formData: { name: '', email: '' }
-  };
-  store.dispatch('addChildTabData', { parentTabId, childTabData });
-}
-
 const removeTab = (tabId) => {
   store.dispatch('deleteTabData', tabId);
 }
