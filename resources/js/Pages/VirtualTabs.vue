@@ -1,7 +1,9 @@
 <template>
     <div class="">
         <div class="m-5 w-auto flex flex-start">
-            <div class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
+            <div 
+            :class="activeTabId === tabId ? 'bg-gray-200' : 'bg-gray-100'"
+            class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
                 v-for="[tabId, tab] in Object.entries(mainTabs)" :key="tabId">
                 {{ tabId }}
             </div>
@@ -9,6 +11,7 @@
         <div v-if="activeTabId"
         class="m-5 w-auto flex flex-start">
             <div
+            
             class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
                 v-for="[tabId, tab] in Object.entries(mainTabs[activeTabId])" :key="tabId">
                 {{ tabId }}
