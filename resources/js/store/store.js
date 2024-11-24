@@ -23,6 +23,8 @@ export default createStore({
             ...data
           }
         }
+      }else{
+        console.error(`Tab ID ${tabId} tidak ditemukan di mainTabs`);
       }
     },
     setActiveTabId(state, tabId) {

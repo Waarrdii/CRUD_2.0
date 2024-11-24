@@ -1,36 +1,36 @@
-
 <template>
-  <Welcome>
+  <VirtualTabs>
     <template #content>
-      <h1>Home</h1>
-      <button @click="incrementCount">Klik saya!</button>
-      <p>Kliks: {{ count }}</p>
-      <button @click="addSecondTab('create')">add second tab</button>
-    </template>
+      <div class="m-5">
+        <h1>Home</h1>
 
-    
-  </Welcome>
+        <PrimaryButton @click="addSecondTab('create')">create</PrimaryButton>
+      </div>
+
+    </template>
+  </VirtualTabs>
 
 </template>
 
 <script setup>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
-import Welcome from './Welcome.vue';
+import VirtualTabs from './VirtualTabs.vue';
 
 const store = useStore()
 const count = computed(() => store.state.count)
+const activeTabId = computed(() => store.state.activeTabId)
 
 
 const addSecondTab = (tabName) => {
-    const secondTabName = tabName;
-    const secondTabData = {
-      content: secondTabName
-    };
-    store.dispatch('addSecondTabData', {tabName: secondTabName, secondTabData: secondTabData});
-    console.log(store.state.secondTabs);
-  
+  const secondTabName = tabName;
+  const secondTabData = {
+    content: "create page"
+  };
+  store.dispatch('setUpdateTabData', { tabId: activeTabId.value , secondTabId : secondTabName, data  : secondTabData });
+  console.log(store.state.mainTabs);
 }
 
 function incrementCount() {
