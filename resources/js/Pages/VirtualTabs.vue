@@ -2,6 +2,7 @@
     <div class="">
         <div class="m-5 w-auto flex flex-start">
             <div 
+            @click="openTab(tabId)"
             :class="activeTabId === tabId ? 'bg-gray-200' : 'bg-gray-100'"
             class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
                 v-for="[tabId, tab] in Object.entries(mainTabs)" :key="tabId">
@@ -11,10 +12,10 @@
         <div v-if="activeTabId"
         class="m-5 w-auto flex flex-start">
             <div
-            
             class="first:rounded-tl-md last:rounded-tr-md border-r bg-gray-100 p-2 hover:bg-gray-200 cursor-pointer "
-                v-for="[tabId, tab] in Object.entries(mainTabs[activeTabId])" :key="tabId">
-                {{ tabId }}
+                v-for="[secondTabId, secondTab] in Object.entries(mainTabs[activeTabId])" :key="secondTabId"
+                @click="openSecondTab(secondTabId)">
+                {{ secondTabId }}
             </div>
         </div>
  </div>
@@ -22,9 +23,9 @@
         <slot name="content" />
     </div>
     <div>
-        <DangerButton class="m-5" @click="addNewTab('home')">Add home</DangerButton>
-        <DangerButton class="m-5" @click="addNewTab('products')">Add products</DangerButton>
-        <DangerButton class="m-5" @click="addNewTab('brands')">Add brands</DangerButton>
+        <DangerButton class="m-5" @click="addNewTab('users')">Users</DangerButton>
+        <DangerButton class="m-5" @click="addNewTab('products')">products</DangerButton>
+        <DangerButton class="m-5" @click="addNewTab('brands')">brands</DangerButton>
     </div>
 
 
@@ -42,37 +43,28 @@ const mainTabs = computed(() => store.state.mainTabs);
 const activeTabId = computed(() => store.state.activeTabId);
 
 const addNewTab = (tab) => {
-    const existingTab = Object.keys(mainTabs.value).find(key => mainTabs.value[key].content === tab);
+    const existingTab = Object.keys(mainTabs.value).includes(tab);
+    const routeData = '/' + tab;
     if (existingTab) {
         return;
     } else {
-        store.dispatch('addNewTab', { tabName: tab, data: { content: 'data adalah ' + tab } });
+        store.dispatch('addNewTab', { tabName: tab, data: { index: {
+            route : routeData
+        } } });
     }
     
     store.dispatch('setActiveTabId', tab);
-    router.visit(tab);
-    console.log(activeTabId.value);
+    router.visit('/' + tab);
+    console.log(mainTabs.value);
 }
 
-const handleUpdateTabDataTest = () => {
-    const tabId = 'home';
-    const secondTabId = 'Tab2';
-    const data = {
-        content: 'Updated Info 2'
-    };
-    if (mainTabs.value[tabId]) {
-        store.dispatch('setUpdateTabData', { tabId, secondTabId, data });
-    }
+const openTab = (tab) => {
+    store.dispatch('setActiveTabId', tab);
+    router.visit('/' + tab);
 }
 
-const handleUpdateTabData = () => {
-    const tabId = 'home';
-    const secondTabId = 'Tab1';
-    const data = {
-        content: 'Updated Info 1'
-    };
-    if (mainTabs.value[tabId]) {
-        store.dispatch('setUpdateTabData', { tabId, secondTabId, data });
-    }
+const openSecondTab = (tab) => {
+    router.visit('/' + activeTabId.value + '/' + tab);
 }
+
 </script>
