@@ -39,8 +39,11 @@ const addSecondTab = (tabName) => {
     route: 'users/' + secondTabName,
   };
   store.dispatch('setUpdateTabData', { tabId: activeTabId.value , secondTabId : secondTabName, data  : secondTabData });
-  console.log(store.state.mainTabs);
+  store.dispatch('setActiveSubTab', {tabId:activeTabId.value , route:secondTabData})
+  console.log(activeTabId.value);
+  console.log(store.state.activeSubTab);
   router.visit('users/' + tabName);
+
 }
 
 function incrementCount() {

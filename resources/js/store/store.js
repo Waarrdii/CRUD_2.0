@@ -3,13 +3,13 @@ import { createStore } from 'vuex';
 export default createStore({
   state: {
     mainTabs: {},
-    secondaryTabs: {},
-    activeTabId: null
+    activeTabId: null,
+    activeSubTab: {}
   },
   mutations: {
-    addNewTab(state, {tabName, data}) {
+    addNewTab(state, { tabName, data }) {
       state.mainTabs = {
-        ... state.mainTabs,
+        ...state.mainTabs,
         [tabName]: {
           ...data
         }
@@ -23,12 +23,25 @@ export default createStore({
             ...data
           }
         }
-      }else{
+      } else {
         console.error(`Tab ID ${tabId} tidak ditemukan di mainTabs`);
       }
     },
     setActiveTabId(state, tabId) {
       state.activeTabId = tabId;
+    },
+
+    //logika dibawah masih salah 
+    setActiveSubTab(state, { tabId, route }) {
+      if (state.activeSubTab[tabId]) {
+        state.activeSubTab[tabId].route = route
+      } else {
+        state.activeSubTab = {
+          ...state.activeSubTab,
+          [tabId]: route
+
+        }
+      }
     }
   },
   actions: {
@@ -40,6 +53,9 @@ export default createStore({
     },
     setActiveTabId({ commit }, tabId) {
       commit('setActiveTabId', tabId);
+    },
+    setActiveSubTab({ commit }, { tabId, route }) {
+      commit ('setActiveSubTab', {tabId, route})
     }
   },
   modules: {}

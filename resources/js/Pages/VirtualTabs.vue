@@ -55,12 +55,13 @@ const addNewTab = (tab) => {
     
     store.dispatch('setActiveTabId', tab);
     router.visit('/' + tab);
-    console.log(mainTabs.value);
+    console.log(activeTabId.value);
 }
 
 const openTab = (tab) => {
     store.dispatch('setActiveTabId', tab);
     router.visit('/' + tab);
+    // console.log(store.state.activeSubTab[tab].route)
 }
 
 const openSecondTab = (tab) => {
