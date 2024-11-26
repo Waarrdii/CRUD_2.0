@@ -33,30 +33,31 @@ export default createStore({
 
     //logika dibawah masih salah 
     setActiveSubTab(state, { tabId, route }) {
-      if (state.activeSubTab[tabId]) {
-        state.activeSubTab[tabId].route = route
+      if (state.activeSubTab[tabId]===tabId) {
+        state.activeSubTab = {
+          [tabId]: route
+        }
       } else {
         state.activeSubTab = {
           ...state.activeSubTab,
           [tabId]: route
-
         }
-      }
     }
-  },
+  }
+},
   actions: {
-    addNewTab({ commit }, tabName) {
-      commit('addNewTab', tabName);
-    },
-    setUpdateTabData({ commit }, { tabId, secondTabId, data }) {
-      commit('updateTabData', { tabId, secondTabId, data });
-    },
-    setActiveTabId({ commit }, tabId) {
-      commit('setActiveTabId', tabId);
-    },
-    setActiveSubTab({ commit }, { tabId, route }) {
-      commit ('setActiveSubTab', {tabId, route})
-    }
+  addNewTab({ commit }, tabName) {
+    commit('addNewTab', tabName);
   },
+  setUpdateTabData({ commit }, { tabId, secondTabId, data }) {
+    commit('updateTabData', { tabId, secondTabId, data });
+  },
+  setActiveTabId({ commit }, tabId) {
+    commit('setActiveTabId', tabId);
+  },
+  setActiveSubTab({ commit }, { tabId, route }) {
+    commit('setActiveSubTab', { tabId, route })
+  }
+},
   modules: {}
 });

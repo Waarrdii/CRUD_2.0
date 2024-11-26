@@ -29,25 +29,22 @@ const props = defineProps({
 })
 
 const store = useStore()
-const count = computed(() => store.state.count)
-const activeTabId = computed(() => store.state.activeTabId)
 
 
+const setActiveSubTab = ({ tabId, route }) => {
+    store.dispatch('setActiveSubTab', { tabId, route })
+}
 const addSecondTab = (tabName) => {
+  const activeTabId = computed(() => store.state.activeTabId);
   const secondTabName = tabName;
   const secondTabData = {
     route: 'users/' + secondTabName,
   };
   store.dispatch('setUpdateTabData', { tabId: activeTabId.value , secondTabId : secondTabName, data  : secondTabData });
-  store.dispatch('setActiveSubTab', {tabId:activeTabId.value , route:secondTabData})
-  console.log(activeTabId.value);
-  console.log(store.state.activeSubTab);
   router.visit('users/' + tabName);
-
+  setActiveSubTab({ tabId: activeTabId.value, route: 'users/' + tabName });
 }
 
-function incrementCount() {
-  store.commit('increment')
-}
+
 
 </script>
